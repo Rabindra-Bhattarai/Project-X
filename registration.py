@@ -15,6 +15,9 @@ def register_user():
 root = tk.Tk()
 root.title("Registration Form")
 
+
+
+
 # Load image
 image = tk.PhotoImage(file="Register.png")
 
@@ -55,7 +58,7 @@ address_entry = tk.Entry(root)
 address_entry.place(relx=0.3, rely=0.5)
 
 register_button = tk.Button(root, text="Register", command=register_user)
-register_button.place(relx=0.3, rely=0.6)
+register_button.place(relx=0.37, rely=0.6)
 
 # Start the Tkinter event loop
 root.mainloop()
