@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import messagebox
-from tkinter import PhotoImage, Label, Entry, Button
 
 def register_user():
     name = name_entry.get()
@@ -14,51 +13,49 @@ def register_user():
 
 # Create the main window
 root = tk.Tk()
+root.title("Registration Form")
 
-root.title("Registration")
+# Load image
+image = tk.PhotoImage(file="Register.png")
 
-# Load image and keep a reference
-image = PhotoImage(file="apple.png")
-label = Label(root, image=image)
-label.pack()
+# Create a canvas to display the image as background
+canvas = tk.Canvas(root, width=500, height=250)  # Adjust width and height as needed
+canvas.pack(fill="both", expand=True)
 
+# Set the image as background
+canvas.create_image(0, 0, anchor="nw", image=image)
 
-# Calculate center coordinates
-screen_width = root.winfo_screenwidth()
-screen_height = root.winfo_screenheight()
-window_width = 500  # Adjust as needed
-window_height = 250  # Adjust as needed
-x = (screen_width - window_width) // 2
-y = (screen_height - window_height) // 2
-
-# Set window size and position
-root.geometry(f"{window_width}x{window_height}+{x}+{y}")
+# Add a heading
+heading = tk.Label(root, text="Welcome", font=("Helvetica", 16, "bold"), bg="white")
+heading.place(relx=0.5, rely=0.05, anchor="center")
 
 # Create and place widgets
-
-name_label = tk.Label(root, text="Name:")
-name_label.pack()
+name_label = tk.Label(root, text="Name:", bg="white")
+name_label.place(relx=0.1, rely=0.2)
 
 name_entry = tk.Entry(root)
-name_entry.pack()
+name_entry.place(relx=0.3, rely=0.2)
 
-password_label = tk.Label(root, text="Password:")
-password_label.pack()
+password_label = tk.Label(root, text="Password:", bg="white")
+password_label.place(relx=0.1, rely=0.3)
 
 password_entry = tk.Entry(root, show="*")
-password_entry.pack()
+password_entry.place(relx=0.3, rely=0.3)
 
-dob_label = tk.Label(root, text="Date of Birth:")
-dob_label.pack()
+dob_label = tk.Label(root, text="Date of Birth:", bg="white")
+dob_label.place(relx=0.1, rely=0.4)
 
 dob_entry = tk.Entry(root)
-dob_entry.pack()
+dob_entry.place(relx=0.3, rely=0.4)
 
-address_label = tk.Label(root, text="Address:")
-address_label.pack()
+address_label = tk.Label(root, text="Address:", bg="white")
+address_label.place(relx=0.1, rely=0.5)
 
 address_entry = tk.Entry(root)
-address_entry.pack()
+address_entry.place(relx=0.3, rely=0.5)
 
 register_button = tk.Button(root, text="Register", command=register_user)
-register_button.pack()
+register_button.place(relx=0.3, rely=0.6)
+
+# Start the Tkinter event loop
+root.mainloop()

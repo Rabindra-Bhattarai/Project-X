@@ -1,38 +1,35 @@
 import tkinter as tk
 from tkinter import messagebox
 
-def validate_login():
-    username = username_entry.get()
-    password = password_entry.get()
-    
-    # Here, you would typically check the username and password against a database or some other form of validation
-    # For simplicity, I'm just checking if both fields are filled
-    if username == "" or password == "":
-        messagebox.showerror("Error", "Please enter both username and password.")
+def check_credentials():
+    username = entry_username.get()
+    password = entry_password.get()
+
+    # You can replace this with your actual authentication logic
+    if username == "admin" and password == "password":
+        messagebox.showinfo("Login Successful", "Welcome, Admin!")
     else:
-        messagebox.showinfo("Success", "Login successful!")
+        messagebox.showerror("Login Failed", "Invalid username or password")
 
 # Create the main window
 root = tk.Tk()
 root.title("Login")
 
-root.geometry("600x400")
+# Create and pack widgets
+label_username = tk.Label(root, text="Username:")
+label_username.pack()
 
-# Create and place widgets
-username_label = tk.Label(root, text="Username:")
-username_label.grid(row=0, column=0, padx=5, pady=5)
+entry_username = tk.Entry(root)
+entry_username.pack()
 
-username_entry = tk.Entry(root)
-username_entry.grid(row=0, column=1, padx=5, pady=5)
+label_password = tk.Label(root, text="Password:")
+label_password.pack()
 
-password_label = tk.Label(root, text="Password:")
-password_label.grid(row=1, column=0, padx=5, pady=5)
+entry_password = tk.Entry(root, show="*")
+entry_password.pack()
 
-password_entry = tk.Entry(root, show="*")
-password_entry.grid(row=1, column=1, padx=5, pady=5)
+button_login = tk.Button(root, text="Login", command=check_credentials)
+button_login.pack()
 
-login_button = tk.Button(root, text="Login", command=validate_login)
-login_button.grid(row=2, column=0, columnspan=2, padx=5, pady=5)
-
-# Start the Tkinter event loop
+# Run the application
 root.mainloop()
