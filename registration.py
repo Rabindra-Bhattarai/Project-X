@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
 import sqlite3
+import hashlib
+import os
 
 # Function to create the SQLite database and table
 def create_database():
@@ -8,22 +10,29 @@ def create_database():
     cursor = conn.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS users
                       (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                       name TEXT,
+                       name TEXT UNIQUE,
                        password TEXT,
                        dob TEXT,
                        address TEXT)''')
     conn.commit()
     conn.close()
 
+# Function to hash passwords
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
+
 # Function to insert a new user into the database
 def insert_user(name, password, dob, address):
     try:
         conn = sqlite3.connect("user_data.db")
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO users (name, password, dob, address) VALUES (?, ?, ?, ?)", (name, password, dob, address))
+        hashed_password = hash_password(password)
+        cursor.execute("INSERT INTO users (name, password, dob, address) VALUES (?, ?, ?, ?)", (name, hashed_password, dob, address))
         conn.commit()
         conn.close()
         messagebox.showinfo("Registration Successful", "User registered successfully!")
+        root.destroy()  # Destroy the registration window
+        os.system('python Login.py')  # Open the Login.py file
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred: {str(e)}")
 

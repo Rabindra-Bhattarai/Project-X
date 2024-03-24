@@ -1,15 +1,43 @@
 import tkinter as tk
 from tkinter import messagebox
+import os
+import sqlite3
+import hashlib
 
 def check_credentials():
     username = entry_username.get()
     password = entry_password.get()
 
-    # You can replace this with your actual authentication logic
-    if username == "admin" and password == "password":
-        messagebox.showinfo("Login Successful", "Welcome, Admin!")
+    # Connect to the database
+    conn = sqlite3.connect("user_data.db")
+    cursor = conn.cursor()
+
+    # Query the database to retrieve the hashed password for the entered username
+    cursor.execute("SELECT password FROM users WHERE name=?", (username,))
+    result = cursor.fetchone()
+
+    if result:
+        # Retrieve the hashed password from the result
+        hashed_password = result[0]
+
+        # Hash the entered password for comparison
+        hashed_entered_password = hash_password(password)
+
+        # Compare the hashed passwords
+        if hashed_entered_password == hashed_password:
+            messagebox.showinfo("Login Successful", "Welcome, " + username + "!")
+            root.destroy()  # Destroy the current window
+            os.system('python dashboard.py')  # Open the dashboard.py file
+        else:
+            messagebox.showerror("Login Failed", "Invalid username or password")
     else:
         messagebox.showerror("Login Failed", "Invalid username or password")
+
+    # Close the database connection
+    conn.close()
+
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
 
 def forgot_password():
     # Implement the logic for password recovery here
