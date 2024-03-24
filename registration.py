@@ -1,22 +1,45 @@
 import tkinter as tk
 from tkinter import messagebox
+import sqlite3
+
+# Function to create the SQLite database and table
+def create_database():
+    conn = sqlite3.connect("user_data.db")
+    cursor = conn.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS users
+                      (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                       name TEXT,
+                       password TEXT,
+                       dob TEXT,
+                       address TEXT)''')
+    conn.commit()
+    conn.close()
+
+# Function to insert a new user into the database
+def insert_user(name, password, dob, address):
+    try:
+        conn = sqlite3.connect("user_data.db")
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO users (name, password, dob, address) VALUES (?, ?, ?, ?)", (name, password, dob, address))
+        conn.commit()
+        conn.close()
+        messagebox.showinfo("Registration Successful", "User registered successfully!")
+    except Exception as e:
+        messagebox.showerror("Error", f"An error occurred: {str(e)}")
 
 def register_user():
     name = name_entry.get()
     password = password_entry.get()
     dob = dob_entry.get()
     address = address_entry.get()
-    
-    # Here, you would typically save the registration information to a database
-    # For simplicity, I'm just displaying the information in a message box
-    messagebox.showinfo("Registration Successful", f"Name: {name}\nPassword: {password}\nDOB: {dob}\nAddress: {address}")
+    insert_user(name, password, dob, address)
 
 # Create the main window
 root = tk.Tk()
 root.title("Registration Form")
 
-
-
+# Create the SQLite database and table if they don't exist
+create_database()
 
 # Load image
 image = tk.PhotoImage(file="Register.png")
