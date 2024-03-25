@@ -79,6 +79,14 @@ def forgot_password():
     send_otp_button = tk.Button(forgot_password_window, text="Send OTP", command=send_otp)
     send_otp_button.pack()
 
+def toggle_password_visibility():
+    if password_entry.cget("show") == "":
+        password_entry.config(show="*")
+        show_hide_button.config(text="Show")
+    else:
+        password_entry.config(show="")
+        show_hide_button.config(text="Hide")
+
 def open_registration():
     root.destroy()
     os.system('python registration.py')
@@ -102,8 +110,11 @@ entry_email.place(relx=0.8, rely=0.3, anchor="e")
 label_password = tk.Label(canvas, text="Password:", bg="white")
 label_password.place(relx=0.5, rely=0.4, anchor="e")
 
-entry_password = tk.Entry(canvas, show="*")
-entry_password.place(relx=0.8, rely=0.4, anchor="e")
+password_entry = tk.Entry(canvas, show="*")
+password_entry.place(relx=0.8, rely=0.4, anchor="e")
+
+show_hide_button = tk.Button(canvas, text="Hide", command=toggle_password_visibility)
+show_hide_button.place(relx=0.85, rely=0.4, anchor="w")
 
 button_login = tk.Button(canvas, text="Login", command=check_credentials)
 button_login.place(relx=0.7, rely=0.65, anchor="e")
