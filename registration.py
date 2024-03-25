@@ -10,7 +10,7 @@ def create_database():
     cursor = conn.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS users
                       (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                       name TEXT UNIQUE,
+                       phone_number TEXT UNIQUE,
                        password TEXT,
                        dob TEXT,
                        address TEXT)''')
@@ -22,12 +22,12 @@ def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
 # Function to insert a new user into the database
-def insert_user(name, password, dob, address):
+def insert_user(phone_number, password, dob, address):
     try:
         conn = sqlite3.connect("user_data.db")
         cursor = conn.cursor()
         hashed_password = hash_password(password)
-        cursor.execute("INSERT INTO users (name, password, dob, address) VALUES (?, ?, ?, ?)", (name, hashed_password, dob, address))
+        cursor.execute("INSERT INTO users (phone_number, password, dob, address) VALUES (?, ?, ?, ?)", (phone_number, hashed_password, dob, address))
         conn.commit()
         conn.close()
         messagebox.showinfo("Registration Successful", "User registered successfully!")
@@ -37,11 +37,11 @@ def insert_user(name, password, dob, address):
         messagebox.showerror("Error", f"An error occurred: {str(e)}")
 
 def register_user():
-    name = name_entry.get()
+    phone_number = phone_entry.get()
     password = password_entry.get()
     dob = dob_entry.get()
     address = address_entry.get()
-    insert_user(name, password, dob, address)
+    insert_user(phone_number, password, dob, address)
 
 # Create the main window
 root = tk.Tk()
@@ -65,11 +65,11 @@ heading = tk.Label(root, text="Welcome", font=("Helvetica", 16, "bold"), bg="whi
 heading.place(relx=0.5, rely=0.05, anchor="center")
 
 # Create and place widgets
-name_label = tk.Label(root, text="Name:", bg="white")
-name_label.place(relx=0.1, rely=0.2)
+phone_label = tk.Label(root, text="Phone Number:", bg="white")
+phone_label.place(relx=0.1, rely=0.2)
 
-name_entry = tk.Entry(root)
-name_entry.place(relx=0.3, rely=0.2)
+phone_entry = tk.Entry(root)
+phone_entry.place(relx=0.3, rely=0.2)
 
 password_label = tk.Label(root, text="Password:", bg="white")
 password_label.place(relx=0.1, rely=0.3)
