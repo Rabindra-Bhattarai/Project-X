@@ -8,7 +8,7 @@ import random
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
-def check_credentials():
+def check_credentials(entry_password):  # Pass entry_password as an argument
     email = entry_email.get()
 
     # Check if the email is a valid Gmail address
@@ -16,7 +16,7 @@ def check_credentials():
         messagebox.showerror("Login Failed", "Please enter a valid Gmail address.")
         return
 
-    password = entry_password.get()
+    password = entry_password.get()  # Use the entry_password passed as an argument
 
     conn = sqlite3.connect("user_data.db")
     cursor = conn.cursor()
@@ -79,12 +79,12 @@ def forgot_password():
     send_otp_button = tk.Button(forgot_password_window, text="Send OTP", command=send_otp)
     send_otp_button.pack()
 
-def toggle_password_visibility():
-    if password_entry.cget("show") == "":
-        password_entry.config(show="*")
+def toggle_password_visibility(entry):
+    if entry.cget("show") == "":
+        entry.config(show="*")
         show_hide_button.config(text="Show")
     else:
-        password_entry.config(show="")
+        entry.config(show="")
         show_hide_button.config(text="Hide")
 
 def open_registration():
@@ -110,13 +110,14 @@ entry_email.place(relx=0.8, rely=0.3, anchor="e")
 label_password = tk.Label(canvas, text="Password:", bg="white")
 label_password.place(relx=0.5, rely=0.4, anchor="e")
 
-password_entry = tk.Entry(canvas, show="*")
-password_entry.place(relx=0.8, rely=0.4, anchor="e")
+# Create the entry widget for password input and assign it the name entry_password
+entry_password = tk.Entry(canvas, show="*")
+entry_password.place(relx=0.8, rely=0.4, anchor="e")
 
-show_hide_button = tk.Button(canvas, text="Hide", command=toggle_password_visibility)
+show_hide_button = tk.Button(canvas, text="Hide", command=lambda: toggle_password_visibility(entry_password))
 show_hide_button.place(relx=0.85, rely=0.4, anchor="w")
 
-button_login = tk.Button(canvas, text="Login", command=check_credentials)
+button_login = tk.Button(canvas, text="Login", command=lambda: check_credentials(entry_password))
 button_login.place(relx=0.7, rely=0.65, anchor="e")
 
 forgot_password_label = tk.Label(canvas, text="Forgot Password?", fg="blue", cursor="hand2")
