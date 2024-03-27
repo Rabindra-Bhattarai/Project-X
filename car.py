@@ -1,6 +1,7 @@
 import tkinter as tk
-from tkinter import messagebox
 from tkinter import ttk
+from tkinter import messagebox
+import os
 
 class CarTestApp:
     def __init__(self, master):
@@ -76,6 +77,10 @@ class CarTestApp:
         heading_label = tk.Label(self.heading_frame, text="Car Driving Written Exam", font=("Arial", 18, "bold"))
         heading_label.pack(pady=10)
 
+        # Go Back Button
+        go_back_button = tk.Button(self.master, text="Go Back", command=self.go_back)
+        go_back_button.place(relx=1, rely=0, anchor='ne')
+
         # Questions
         for i, question in enumerate(self.questions):
             question_label = tk.Label(self.questions_frame, text=question["prompt"], wraplength=600, font=("Arial", 12), anchor="w")
@@ -107,6 +112,13 @@ class CarTestApp:
 
         answers_text += f"\nYou got {num_correct} out of {len(self.questions)} questions correct."
         self.answers_label.config(text=answers_text)
+
+    def go_back(self):
+        # Close the current window
+        self.master.destroy()
+        
+        # Open the dashboard.py file
+        os.system('python dashboard.py')
 
 def main():
     root = tk.Tk()
