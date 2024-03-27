@@ -7,6 +7,9 @@ class CarTestApp:
         self.master = master
         self.master.title("Car Driving Written Test")
 
+        self.heading_frame = tk.Frame(self.master)
+        self.heading_frame.pack()
+
         self.questions_frame = tk.Frame(self.master)
         self.questions_frame.pack()
 
@@ -69,6 +72,11 @@ class CarTestApp:
         self.create_widgets()
 
     def create_widgets(self):
+        # Heading
+        heading_label = tk.Label(self.heading_frame, text="Car Driving Written Exam", font=("Arial", 18, "bold"))
+        heading_label.pack(pady=10)
+
+        # Questions
         for i, question in enumerate(self.questions):
             question_label = tk.Label(self.questions_frame, text=question["prompt"], wraplength=600, font=("Arial", 12), anchor="w")
             question_label.grid(row=i, column=0, sticky="w", padx=10, pady=5)
@@ -76,15 +84,29 @@ class CarTestApp:
                 option_button = ttk.Radiobutton(self.questions_frame, text=option, variable=self.option_var[i], value=j)
                 option_button.grid(row=i, column=j+1, sticky="w", padx=10, pady=5)
 
-        submit_button = tk.Button(self.master, text="Submit", command=self.check_answers)
+        # Submit Button
+        submit_button = tk.Button(self.master, text="Submit", command=self.show_answers)
         submit_button.pack(pady=10)
 
-    def check_answers(self):
-        score = 0
+        # Answers Label
+        self.answers_label = tk.Label(self.master, text="", wraplength=800, font=("Arial", 12), anchor="w")
+        self.answers_label.pack()
+
+    def show_answers(self):
+        num_correct = 0
+        answers_text = ""
         for i, question in enumerate(self.questions):
-            if self.option_var[i].get() == question["correct_option"]:
-                score += 1
-        messagebox.showinfo("Result", f"You got {score} out of {len(self.questions)} questions correct.")
+            selected_option = self.option_var[i].get()
+            if selected_option == question["correct_option"]:
+                num_correct += 1
+                answers_text += f"Question {i+1}: Correct\n"
+            else:
+                correct_option_text = question["options"][question["correct_option"]]
+                selected_option_text = question["options"][selected_option]
+                answers_text += f"Question {i+1}: Incorrect. Correct answer: {correct_option_text}. Your answer: {selected_option_text}\n"
+
+        answers_text += f"\nYou got {num_correct} out of {len(self.questions)} questions correct."
+        self.answers_label.config(text=answers_text)
 
 def main():
     root = tk.Tk()
