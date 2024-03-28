@@ -5,9 +5,12 @@ import hashlib
 import os
 import re
 
+# New database name
+DATABASE_NAME = "ravi.db"
+
 # Function to create the SQLite database and table
 def create_database():
-    conn = sqlite3.connect("user_data.db")
+    conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS users
                       (id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,7 +36,6 @@ def validate_dob(dob):
 
 # Function to validate and format address
 def validate_address(address):
-  
     if address.isalpha():
         return True
     else:
@@ -55,7 +57,7 @@ def validate_password(password):
 # Function to insert a new user into the database
 def insert_user(email, password, dob, address):
     try:
-        conn = sqlite3.connect("user_data.db")
+        conn = sqlite3.connect(DATABASE_NAME)
         cursor = conn.cursor()
         hashed_password = hash_password(password)
         cursor.execute("INSERT INTO users (email, password, dob, address) VALUES (?, ?, ?, ?)",
@@ -63,10 +65,30 @@ def insert_user(email, password, dob, address):
         conn.commit()
         conn.close()
         messagebox.showinfo("Registration Successful", "User registered successfully!")
-        root.destroy()  # Destroy the registration window
-        os.system('python Login.py')  # Open the Login.py file
+        fetch_and_display_user_data(email)  # Fetch and display user data after registration
+        root.destroy()
+        os.system('python Login.py') 
+         # Destroy the registration window
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred: {str(e)}")
+
+# Function to fetch user data from the database and display it
+def fetch_and_display_user_data(email):
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE email=?", (email,))
+    user_data = cursor.fetchone()
+    conn.close()
+
+    # Display user data in input fields
+    if user_data:
+        email_entry.delete(0, tk.END)
+        email_entry.insert(0, user_data[1])  # Index 1 corresponds to email
+        # Password field will not be filled for security reasons
+        dob_entry.delete(0, tk.END)
+        dob_entry.insert(0, user_data[3])  # Index 3 corresponds to dob
+        address_entry.delete(0, tk.END)
+        address_entry.insert(0, user_data[4])  # Index 4 corresponds to address
 
 # Function to handle user registration
 def register_user():
@@ -91,6 +113,8 @@ def register_user():
         return
 
     insert_user(email, password, dob, address)
+
+
 
 root = tk.Tk()
 root.title("Registration Form")

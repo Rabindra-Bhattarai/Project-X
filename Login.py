@@ -18,7 +18,7 @@ def check_credentials(entry_password):  # Pass entry_password as an argument
 
     password = entry_password.get()  # Use the entry_password passed as an argument
 
-    conn = sqlite3.connect("user_data.db")
+    conn = sqlite3.connect("ravi.db")
     cursor = conn.cursor()
 
     cursor.execute("SELECT password FROM users WHERE email=?", (email,))
@@ -52,7 +52,7 @@ def forgot_password():
             messagebox.showerror("Error", "Please enter a valid Gmail address.")
             return
 
-        conn = sqlite3.connect("user_data.db")
+        conn = sqlite3.connect("ravi.db")
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM users WHERE email=?", (email,))
         result = cursor.fetchone()
