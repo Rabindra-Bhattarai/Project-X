@@ -9,9 +9,8 @@ def display_license_info():
     # Open the car.py file
     os.system('python car.py')
 
-def search_license():
-    # Function to search for specific license information
-    pass
+def logout():
+    root.destroy()
 
 # Create main window
 root = tk.Tk()
@@ -38,5 +37,9 @@ btn_bike_registration = tk.Button(navigation_frame, text="Bike Licence", command
 btn_bike_registration.pack(side=tk.LEFT, padx=10)
 btn_scooter_license = tk.Button(navigation_frame, text="Scooter License", command=display_license_info, font=("Helvetica", font_size))
 btn_scooter_license.pack(side=tk.LEFT, padx=10)
+
+# Add logout button
+btn_logout = tk.Button(root, text="Log Out", command=logout, font=("Helvetica", font_size), fg="blue")
+btn_logout.place(relx=0.95, rely=0.95, anchor=tk.SE)
 
 root.mainloop()
