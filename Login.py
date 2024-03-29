@@ -91,6 +91,7 @@ def open_registration():
     root.destroy()
     os.system('python registration.py')
 
+# Create a main window for the application
 root = tk.Tk()
 root.title("Login")
 root.geometry("500x250")
